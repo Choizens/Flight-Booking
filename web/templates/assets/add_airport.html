@@ -1,0 +1,21 @@
+<form method="POST">
+    <div class="mb-3">
+        <label for="model" class="form-label">Model</label>
+        <input type="text" name="model" id="model" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="capacity" class="form-label">Capacity</label>
+        <input type="number" name="capacity" id="capacity" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="airline_id" class="form-label">Airline</label>
+        <select name="airline_id" id="airline_id" class="form-select" required>
+            <option value="" disabled selected>Select an airline</option>
+            {% for airline in airlines %}
+            <option value="{{ airline.id }}">{{ airline.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success">Add</button>
+    <a href="{{ url_for('views.aircraft') }}" class="btn btn-secondary">Cancel</a>
+</form>

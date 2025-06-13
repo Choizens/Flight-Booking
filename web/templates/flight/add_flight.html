@@ -1,0 +1,26 @@
+
+{% block content %}
+<div class="container">
+    <h2>Add Flight</h2>
+        <a class="btn btn-secondary" href="{{ url_for('views.dashboard') }}"><i class="fas fa-arrow-left"></i>Back|</a>
+    <form method="POST">
+        <div class="mb-3">
+            <label>Flight Number</label>
+            <input type="text" class="form-control" name="flight_number" required>
+        </div>
+        <div class="mb-3">
+            <label>Airline ID</label>
+            <input type="number" class="form-control" name="airline_id" required>
+        </div>
+        <div class="mb-3">
+            <label>Aircraft ID</label>
+            <input type="number" class="form-control" name="aircraft_id" required>
+        </div>
+        <div class="mb-3">
+            <label>Route ID</label>
+            <input type="number" class="form-control" name="route_id" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Flight</button>
+    </form>
+</div>
+{% endblock %}

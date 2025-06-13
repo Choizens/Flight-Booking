@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Edit Aircraft</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label for="model" class="form-label">Model</label>
+        <input type="text" name="model" id="model" class="form-control" value="{{ aircraft.model }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="capacity" class="form-label">Capacity</label>
+        <input type="number" name="capacity" id="capacity" class="form-control" value="{{ aircraft.capacity }}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a href="{{ url_for('views.aircraft') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

@@ -1,0 +1,33 @@
+
+{% block content %}
+<div class="container">
+    <h2>Flight Schedules</h2>
+    <a class="btn btn-secondary" href="{{ url_for('views.dashboard') }}"><i class="fas fa-arrow-left"></i>Back|</a>
+    <a class="btn btn-primary mb-3" href="{{ url_for('views.add_flight_schedule') }}">Add Schedule</a>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Flight</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for schedule in schedules %}
+            <tr>
+                <td>{{ schedule.id }}</td>
+                <td>{{ schedule.flight.flight_number }} ({{ schedule.flight.airline.name }})</td>
+                <td>{{ schedule.departure_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ schedule.arrival_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    <a class="btn btn-sm btn-warning" href="{{ url_for('views.edit_flight_schedule', id=schedule.id) }}">Edit</a>
+                    <a class="btn btn-sm btn-danger" href="{{ url_for('views.delete_flight_schedule', id=schedule.id) }}" onclick="return confirm('Delete this schedule?');">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

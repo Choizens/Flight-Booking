@@ -1,0 +1,36 @@
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Bookings</h2>
+  <a class="btn btn-secondary" href="{{ url_for('views.dashboard') }}"><i class="fas fa-arrow-left"></i>Back|</a>
+  <a href="{{ url_for('views.add_booking') }}" class="btn btn-primary mb-3">Add New Booking</a>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Student</th>
+        <th>Booking Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for booking in bookings %}
+      <tr>
+        <td>{{ booking.id }}</td>
+        <td>{{ booking.student.first_name }} {{ booking.student.last_name }}</td>
+        <td>{{ booking.booking_date.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td>{{ booking.status }}</td>
+        <td>
+          <a href="{{ url_for('views.edit_booking', id=booking.id) }}" class="btn btn-sm btn-warning">Edit</a>
+          <a href="{{ url_for('views.delete_booking', id=booking.id) }}" class="btn btn-sm btn-danger" 
+             onclick="return confirm('Are you sure to delete this booking?');">Delete</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="text-center">No bookings found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

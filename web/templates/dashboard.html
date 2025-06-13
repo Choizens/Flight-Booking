@@ -1,0 +1,127 @@
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      background-color: #f8f9fa;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      background-color: #343a40;
+      padding-top: 1rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      overflow-y: auto;
+    }
+
+    .sidebar a {
+      color: #ffffff;
+      text-decoration: none;
+      padding: 12px 20px;
+      display: block;
+    }
+
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+
+    .sidebar .active {
+      background-color: #007bff;
+    }
+
+    .sidebar .section-title {
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #adb5bd;
+    }
+
+    .content {
+      margin-left: 250px;
+      padding: 2rem;
+      width: calc(100% - 250px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <h4 class="text-white text-center mb-3">Flight Admin</h4>
+
+    <!-- Flight Management -->
+    <div class="section-title">Flight Management</div>
+    <a class="text-white" data-bs-toggle="collapse" href="#flightMgmt" role="button" aria-expanded="false" aria-controls="flightMgmt">
+      <i class="fas fa-plane"></i> Manage Flights <i class="fas fa-caret-down float-end"></i>
+    </a>
+    <div class="collapse ps-3" id="flightMgmt">
+      <a href="{{ url_for('views.flights') }}">Flights</a>
+      <a href="{{ url_for('views.flight_routes') }}">Routes</a>
+      <a href="{{ url_for('views.flight_schedules') }}">Schedules</a>
+      <a href="{{ url_for('views.flight_seats') }}">Seats</a>
+      <a href="{{ url_for('views.seat_classes') }}">Seat Classes</a>
+    </div>
+
+    <!-- Assets -->
+    <div class="section-title">Assets</div>
+    <a class="text-white" data-bs-toggle="collapse" href="#assets" role="button" aria-expanded="false" aria-controls="assets">
+      <i class="fas fa-box"></i> Assets <i class="fas fa-caret-down float-end"></i>
+    </a>
+    <div class="collapse ps-3" id="assets">
+      <a href="{{ url_for('views.airports') }}">Airports</a>
+      <a href="{{ url_for('views.airlines') }}">Airlines</a>
+      <a href="{{ url_for('views.aircraft') }}">Aircraft</a>
+    </div>
+
+    <!-- Bookings & Payments -->
+    <div class="section-title">Bookings & Payments</div>
+    <a class="text-white" data-bs-toggle="collapse" href="#bookings" role="button" aria-expanded="false" aria-controls="bookings">
+      <i class="fas fa-receipt"></i> Bookings <i class="fas fa-caret-down float-end"></i>
+    </a>
+    <div class="collapse ps-3" id="bookings">
+      <a href="{{ url_for('views.bookings') }}">Bookings</a>
+      <a href="{{ url_for('views.booking_details') }}">Booking Details</a>
+      <a href="{{ url_for('views.payments') }}">Payments</a>
+    </div>
+
+    <!-- Passengers -->
+    <div class="section-title">Passenger & Check-In</div>
+    <a class="text-white" data-bs-toggle="collapse" href="#passenger" role="button" aria-expanded="false" aria-controls="passenger">
+      <i class="fas fa-user-friends"></i> Passengers <i class="fas fa-caret-down float-end"></i>
+    </a>
+    <div class="collapse ps-3" id="passenger">
+      <a href="{{ url_for('views.check_ins') }}">Check-Ins</a>
+      <a href="{{ url_for('views.students') }}">Student</a>
+    </div>
+
+    <!-- Logout -->
+    <div class="mt-auto">
+      <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="content">
+    <h1 class="mb-4">Welcome, {{ current_user.username }}</h1>
+    <p>This is your flight booking system dashboard. Use the sidebar to manage entities.</p>
+  </main>
+  
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Edit Booking Detail</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Edit Booking Detail</h1>
+
+    <form method="POST" action="{{ url_for('view.edit_booking_detail', id=detail.id) }}">
+        <label for="booking_id">Booking ID:</label><br>
+        <input type="text" id="booking_id" name="booking_id" value="{{ detail.booking_id }}" required><br><br>
+
+        <label for="flight_id">Flight ID:</label><br>
+        <input type="text" id="flight_id" name="flight_id" value="{{ detail.flight_id }}" required><br><br>
+
+        <label for="seat_class_id">Seat Class ID:</label><br>
+        <input type="text" id="seat_class_id" name="seat_class_id" value="{{ detail.seat_class_id }}" required><br><br>
+
+        <label for="quantity">Quantity:</label><br>
+        <input type="number" id="quantity" name="quantity" min="1" value="{{ detail.quantity }}" required><br><br>
+
+        <button type="submit">Update Booking Detail</button>
+        <a href="{{ url_for('booking_details') }}">Cancel</a>
+    </form>
+</body>
+</html>

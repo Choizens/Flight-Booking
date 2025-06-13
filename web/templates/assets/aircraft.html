@@ -1,0 +1,30 @@
+
+{% block content %}
+<h2>Aircraft</h2>
+<a class="btn btn-secondary" href="{{ url_for('views.dashboard') }}"><i class="fas fa-arrow-left"></i>Back|</a>
+<a href="{{ url_for('views.add_aircraft') }}" class="btn btn-success mb-3">Add Aircraft</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Model</th>
+            <th>Capacity</th>
+            <th>Actions</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for a in aircraft %}
+        <tr>
+            <td>{{ a.id }}</td>
+            <td>{{ a.model }}</td>
+            <td>{{ a.capacity }}</td>
+            <td>
+                <a href="{{ url_for('views.edit_aircraft', id=a.id) }}" class="btn btn-primary btn-sm">Edit</a>
+                <a href="{{ url_for('views.delete_aircraft', id=a.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete this aircraft?');">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% block content %}
+<h2>Add Check-In</h2>
+<form method="POST">
+    <div class="form-group">
+        <label>Booking Detail</label>
+        <select name="booking_detail_id" class="form-control" required>
+            {% for detail in booking_details %}
+            <option value="{{ detail.id }}">ID: {{ detail.id }} - Seat: {{ detail.seat_number }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Baggage Count</label>
+        <input type="number" name="checked_baggage_count" class="form-control" value="0">
+    </div>
+    <div class="form-group">
+        <label>Baggage Weight (kg)</label>
+        <input type="number" step="0.1" name="checked_baggage_weight" class="form-control" value="0.0">
+    </div>
+    <button type="submit" class="btn btn-primary">Add Check-In</button>
+</form>
+{% endblock %}

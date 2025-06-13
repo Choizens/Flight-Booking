@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Edit Flight Schedule</h2>
+    <form method="POST">
+        <div class="mb-3">
+            <label>Select Flight</label>
+            <select name="flight_id" class="form-control" required>
+                {% for flight in flights %}
+                    <option value="{{ flight.id }}" {% if flight.id == schedule.flight_id %}selected{% endif %}>
+                        {{ flight.flight_number }} ({{ flight.airline.name }})
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label>Departure Time</label>
+            <input type="datetime-local" name="departure_time" class="form-control"
+                   value="{{ schedule.departure_time.strftime('%Y-%m-%dT%H:%M') }}" required>
+        </div>
+        <div class="mb-3">
+            <label>Arrival Time</label>
+            <input type="datetime-local" name="arrival_time" class="form-control"
+                   value="{{ schedule.arrival_time.strftime('%Y-%m-%dT%H:%M') }}" required>
+        </div>
+        <button type="submit" class="btn btn-success">Update Schedule</button>
+    </form>
+</div>
+{% endblock %}

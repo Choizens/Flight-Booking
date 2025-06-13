@@ -1,0 +1,32 @@
+{% block content %}
+<div class="container">
+    <h2>Seat Classes</h2>
+    <a class="btn btn-secondary" href="{{ url_for('views.dashboard') }}"><i class="fas fa-arrow-left"></i>Back|</a>
+    <a class="btn btn-primary mb-3" href="{{ url_for('views.add_seat_class') }}">Add Seat Class</a>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price Multiplier</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cls in classes %}
+            <tr>
+                <td>{{ cls.id }}</td>
+                <td>{{ cls.name }}</td>
+                <td>{{ cls.description or '-' }}</td>
+                <td>{{ cls.price_multiplier }}</td>
+                <td>
+                    <a class="btn btn-sm btn-warning" href="{{ url_for('views.edit_seat_class', id=cls.id) }}">Edit</a>
+                    <a class="btn btn-sm btn-danger" href="{{ url_for('views.delete_seat_class', id=cls.id) }}" onclick="return confirm('Delete this seat class?');">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

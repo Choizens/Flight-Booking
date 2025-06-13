@@ -1,0 +1,29 @@
+
+{% block content %}
+<h2>Airlines</h2>
+<a class="btn btn-secondary" href="{{ url_for('views.dashboard') }}"><i class="fas fa-arrow-left"></i>Back|</a>
+<a href="{{ url_for('views.add_airline') }}" class="btn btn-success mb-3">Add Airline</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for airline in airlines %}
+        <tr>
+            <td>{{ airline.id }}</td>
+            <td>{{ airline.code }}</td>
+            <td>{{ airline.name }}</td>
+            <td>
+                <a href="{{ url_for('views.edit_airline', id=airline.id) }}" class="btn btn-primary btn-sm">Edit</a>
+                <a href="{{ url_for('views.delete_airline', id=airline.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this airline?');">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,125 @@
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .back-btn {
+        display: inline-block;
+        background-color: #6c757d;
+        color: white;
+        padding: 8px 16px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 14px;
+        margin-bottom: 15px;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .back-btn:hover {
+        background-color: #5a6268;
+    }
+
+    .back-btn i {
+        margin-right: 6px;
+    }
+
+    .add-btn {
+        display: inline-block;
+        background-color: #28a745;
+        color: #fff;
+        padding: 8px 16px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        margin-left: 10px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    th, td {
+        border: 1px solid #ccc;
+        padding: 10px 12px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #eef6ff;
+    }
+
+    .btn-sm {
+        padding: 6px 10px;
+        font-size: 14px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        color: white;
+        margin-right: 5px;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+    }
+
+    .btn-sm i {
+        pointer-events: none;
+    }
+</style>
+
+<h1>Flights</h1>
+<a class="back-btn" href="{{ url_for('views.dashboard') }}"><i class="fas fa-arrow-left"></i>Back</a>
+<a href="{{ url_for('views.add_flight') }}" class="add-btn"><i class="fas fa-plus"></i> Add Flight</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Flight Number</th>
+            <th>Airline</th>
+            <th>Aircraft</th>
+            <th>Route</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for flight in flights %}
+        <tr>
+            <td>{{ flight.id }}</td>
+            <td>{{ flight.flight_number }}</td>
+            <td>{{ flight.airline_id }}</td>
+            <td>{{ flight.aircraft_id }}</td>
+            <td>{{ flight.route_id }}</td>
+            <td>
+                <a href="{{ url_for('views.edit_flight', id=flight.id) }}" class="btn-sm btn-info"><i class="fas fa-edit"></i>Edit</a>
+                <form action="{{ url_for('views.delete_flight', id=flight.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn-sm btn-danger" onclick="return confirm('Delete this flight?');"><i class="fas fa-trash"></i>Delete</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

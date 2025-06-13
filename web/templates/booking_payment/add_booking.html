@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Add New Booking</h2>
+  <form method="POST">
+    <div class="mb-3">
+      <label for="student_id" class="form-label">Student</label>
+      <select class="form-select" name="student_id" id="student_id" required>
+        <option value="" disabled selected>Select Student</option>
+        {% for student in students %}
+        <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <select class="form-select" name="status" id="status" required>
+        <option value="Pending">Pending</option>
+        <option value="Confirmed">Confirmed</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Booking</button>
+    <a href="{{ url_for('views.bookings') }}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

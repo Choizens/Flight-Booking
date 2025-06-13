@@ -1,0 +1,26 @@
+
+{% block content %}
+<div class="container">
+    <h2>Add Flight Schedule</h2>
+     <a class="btn btn-secondary" href="{{ url_for('views.flight_schedules') }}"><i class="fas fa-arrow-left"></i>Back|</a>
+    <form method="POST">
+        <div class="mb-3">
+            <label>Select Flight</label>
+            <select name="flight_id" class="form-control" required>
+                {% for flight in flights %}
+                    <option value="{{ flight.id }}">{{ flight.flight_number }} ({{ flight.airline.name }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label>Departure Time</label>
+            <input type="datetime-local" name="departure_time" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Arrival Time</label>
+            <input type="datetime-local" name="arrival_time" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Schedule</button>
+    </form>
+</div>
+{% endblock %}

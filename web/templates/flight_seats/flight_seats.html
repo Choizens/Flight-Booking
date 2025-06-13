@@ -1,0 +1,37 @@
+
+{% block content %}
+<div class="container">
+    <h2>Flight Seats</h2>
+    <a class="btn btn-secondary" href="{{ url_for('views.dashboard') }}"><i class="fas fa-arrow-left"></i>Back|</a>
+    <a class="btn btn-primary mb-3" href="{{ url_for('views.add_flight_seat') }}">Add Seat</a>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Flight Schedule</th>
+                <th>Seat Number</th>
+                <th>Seat Class</th>
+                <th>Available</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for seat in seats %}
+            <tr>
+                <td>{{ seat.id }}</td>
+                <td>{{ seat.flight_schedule.flight.flight_number }} - {{ seat.flight_schedule.departure_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ seat.seat_number }}</td>
+                <td>{{ seat.seat_class.name }}</td>
+                <td>{{ 'Yes' if seat.is_available else 'No' }}</td>
+                <td>{{ seat.price }}</td>
+                <td>
+                    <a class="btn btn-sm btn-warning" href="{{ url_for('views.edit_flight_seat', id=seat.id) }}">Edit</a>
+                    <a class="btn btn-sm btn-danger" href="{{ url_for('views.delete_flight_seat', id=seat.id) }}" onclick="return confirm('Delete this seat?');">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
