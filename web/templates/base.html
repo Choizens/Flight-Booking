@@ -1,16 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Dashboard{% endblock %}</title>
-    <!-- Bootstrap & FontAwesome -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Your Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-    {% block content %}{% endblock %}
+<body class="h-screen bg-gray-100 flex">
+
+  <!-- Sidebar -->
+  <nav class="w-64 bg-green-950 text-white flex flex-col p-4 fixed h-full overflow-y-auto">
+    <h4 class="text-center text-2xl font-bold mb-6">Flight Admin</h4>
+
+    <a href="{{ url_for('views.dashboard') }}" class="flex justify-between items-center py-2 px-4 hover:bg-gray-700 rounded">
+      <span class="flex items-center">
+        <i class="fas fa-home mr-2"></i> Dashboard
+      </span>
+    </a>
+
+    <!-- Flight Management -->
+    <div class="text-sm uppercase text-gray-400 px-4 mb-1">Flight Management</div>
+    <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center" onclick="toggleMenu('flightMgmt')">
+      <span><i class="fas fa-plane mr-2"></i> Manage Flights</span><i class="fas fa-caret-down"></i>
+    </button>
+    <div id="flightMgmt" class="hidden pl-6 text-sm">
+      <a href="{{ url_for('views.flights') }}" class="block py-2 hover:bg-gray-700 rounded">Flights</a>
+      <a href="{{ url_for('views.flight_routes') }}" class="block py-2 hover:bg-gray-700 rounded">Routes</a>
+      <a href="{{ url_for('views.flight_schedules') }}" class="block py-2 hover:bg-gray-700 rounded">Schedules</a>
+      <a href="{{ url_for('views.flight_seats') }}" class="block py-2 hover:bg-gray-700 rounded">Seats</a>
+      <a href="{{ url_for('views.seat_classes') }}" class="block py-2 hover:bg-gray-700 rounded">Seat Classes</a>
+    </div>
+
+    <!-- Assets -->
+    <div class="text-sm uppercase text-gray-400 px-4 mt-4 mb-1">Assets</div>
+    <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center" onclick="toggleMenu('assets')">
+      <span><i class="fas fa-box mr-2"></i> Assets</span><i class="fas fa-caret-down"></i>
+    </button>
+    <div id="assets" class="hidden pl-6 text-sm">
+      <a href="{{ url_for('views.airports') }}" class="block py-2 hover:bg-gray-700 rounded">Airports</a>
+      <a href="{{ url_for('views.airlines') }}" class="block py-2 hover:bg-gray-700 rounded">Airlines</a>
+      <a href="{{ url_for('views.aircraft') }}" class="block py-2 hover:bg-gray-700 rounded">Aircraft</a>
+    </div>
+
+    <!-- Bookings -->
+    <div class="text-sm uppercase text-gray-400 px-4 mt-4 mb-1">Bookings & Payments</div>
+    <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center" onclick="toggleMenu('bookings')">
+      <span><i class="fas fa-receipt mr-2"></i> Bookings</span><i class="fas fa-caret-down"></i>
+    </button>
+    <div id="bookings" class="hidden pl-6 text-sm">
+      <a href="{{ url_for('views.bookings') }}" class="block py-2 hover:bg-gray-700 rounded">Bookings</a>
+      <a href="{{ url_for('views.booking_details') }}" class="block py-2 hover:bg-gray-700 rounded">Booking Details</a>
+      <a href="{{ url_for('views.payments') }}" class="block py-2 hover:bg-gray-700 rounded">Payments</a>
+    </div>
+
+    <!-- Passengers -->
+    <div class="text-sm uppercase text-gray-400 px-4 mt-4 mb-1">Passenger & Check-In</div>
+    <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center" onclick="toggleMenu('passenger')">
+      <span><i class="fas fa-user-friends mr-2"></i> Passengers</span><i class="fas fa-caret-down"></i>
+    </button>
+    <div id="passenger" class="hidden pl-6 text-sm">
+      <a href="{{ url_for('views.check_ins') }}" class="block py-2 hover:bg-gray-700 rounded">Check-Ins</a>
+      <a href="{{ url_for('views.students') }}" class="block py-2 hover:bg-gray-700 rounded">Student</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="ml-64 p-6 w-full overflow-y-auto">
+
+    <!-- Header with profile -->
+    <div class="mb-6 flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold mb-1">Welcome, {{ current_user.username }}</h1>
+        <p class="text-gray-600">Here’s what’s happening in your system today:</p>
+      </div>
+      <div class="relative">
+        <button onclick="toggleMenu('profileMenu')" class="flex items-center bg-white px-4 py-2 rounded-lg shadow hover:shadow-md transition">
+          <img src="{{ url_for('static', filename='uploads/' + current_user.profile_image) }}"
+            class="w-10 h-10 rounded-full object-cover border" alt="Profile Image">
+          <span class="text-gray-700 font-medium">{{ current_user.username }}</span>
+          <i class="fas fa-caret-down ml-2 text-sm text-gray-500"></i>
+        </button>
+        <div id="profileMenu" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg hidden z-10">
+          <a href="{{ url_for('views.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            <i class="fas fa-user mr-2"></i> Profile
+          </a>
+          <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Page-specific content -->
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <script>
+    function toggleMenu(id) {
+      const menu = document.getElementById(id);
+      menu.classList.toggle("hidden");
+    }
+
+    // Optional: Close profile dropdown if clicked outside
+    window.addEventListener('click', function (e) {
+      const profileMenu = document.getElementById('profileMenu');
+      const button = document.querySelector('[onclick="toggleMenu(\'profileMenu\')"]');
+      if (!profileMenu.contains(e.target) && !button.contains(e.target)) {
+        profileMenu.classList.add('hidden');
+      }
+    });
+  </script>
 </body>
 </html>

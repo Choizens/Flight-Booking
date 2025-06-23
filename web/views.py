@@ -6,17 +6,56 @@ from werkzeug.security import generate_password_hash
 from datetime import datetime
 import random
 import string
+import os
+from flask import request, redirect, url_for, render_template, flash
+from werkzeug.utils import secure_filename
+from flask_login import login_required, current_user
 
+
+upload_folder = os.path.join('web', 'static', 'uploads')
 views = Blueprint('views', __name__)
+
 
 @views.route('/')
 def home():
     return render_template('index.html')
 
+# ---------------------------
+# Dashboard View
+# ---------------------------
 @views.route('/dashboard')
 @login_required
 def dashboard():
     return render_template('dashboard.html')
+
+# ---------------------------
+# User View
+# ---------------------------
+@views.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html')
+
+@views.route('/profile/update-image', methods=['POST'])
+@login_required
+def update_profile_image():
+    if 'profile_image' not in request.files:
+        flash('No file selected.', 'error')
+        return redirect(url_for('views.profile'))
+
+    file = request.files['profile_image']
+    if file.filename == '':
+        flash('Please choose a file.', 'error')
+        return redirect(url_for('views.profile'))
+
+    filename = secure_filename(file.filename)
+    file_path = os.path.join(upload_folder, filename)
+    file.save(file_path)
+
+    current_user.profile_image = filename
+    db.session.commit()
+    flash('Profile image updated successfully!', 'success')
+    return redirect(url_for('views.profile'))
 
 # ---------------------------
 # Flight View
@@ -30,12 +69,24 @@ def flights():
 @views.route('/flights/add', methods=['GET', 'POST'])
 @login_required
 def add_flight():
+    airlines = Airline.query.all()
+    aircrafts = Aircraft.query.all()
+    routes = FlightRoute.query.all()
+
     if request.method == 'POST':
-        # Example fields – adjust based on your Flight model
         flight_number = request.form['flight_number']
         airline_id = request.form['airline_id']
         aircraft_id = request.form['aircraft_id']
         route_id = request.form['route_id']
+
+        # ✅ Check if flight number already exists
+        existing_flight = Flight.query.filter_by(flight_number=flight_number).first()
+        if existing_flight:
+            flash('Flight number already exists. Please use a different one.', 'error')
+            return render_template('flight/add_flight.html',
+                                   airlines=airlines,
+                                   aircrafts=aircrafts,
+                                   routes=routes)
 
         new_flight = Flight(
             flight_number=flight_number,
@@ -47,7 +98,12 @@ def add_flight():
         db.session.commit()
         flash('Flight added successfully!', 'success')
         return redirect(url_for('views.flights'))
-    return render_template('flight/add_flight.html')
+
+    return render_template('flight/add_flight.html',
+                           airlines=airlines,
+                           aircrafts=aircrafts,
+                           routes=routes)
+
 
 @views.route('/flights/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -85,16 +141,22 @@ def flight_routes():
 @login_required
 def add_flight_route():
     airports = Airport.query.all()
+    airlines = Airline.query.all()
+    aircraft = Aircraft.query.all()
+
     if request.method == 'POST':
         departure_airport_id = request.form['departure_airport_id']
         arrival_airport_id = request.form['arrival_airport_id']
+        airline_id = request.form['airline_id']
+        aircraft_id = request.form['aircraft_id']
         distance = request.form['distance']
         duration = request.form['duration']
 
         new_route = FlightRoute(
             departure_airport_id=departure_airport_id,
             arrival_airport_id=arrival_airport_id,
-            airline_id=1,  # or a dropdown value if implemented
+            airline_id=airline_id,
+            aircraft_id=aircraft_id,
             distance=distance,
             duration=duration
         )
@@ -103,7 +165,9 @@ def add_flight_route():
         db.session.commit()
         flash('Flight route added successfully!', 'success')
         return redirect(url_for('views.flight_routes'))
-    return render_template('flight_routes/add_route.html', airports=airports)
+
+    return render_template('flight_routes/add_route.html', airports=airports, airlines=airlines, aircraft=aircraft)
+
 
 @views.route('/flight_routes/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -136,7 +200,27 @@ def delete_flight_route(id):
 @login_required
 def flight_schedules():
     schedules = FlightSchedule.query.all()
-    return render_template('flight_schedules/flight_schedules.html', schedules=schedules)
+    current_time = datetime.now()  # Use local time instead of UTC
+
+    schedule_data = []
+    for s in schedules:
+        if current_time < s.departure_time:
+            status = 'Standby'
+        elif s.departure_time <= current_time < s.arrival_time:
+            status = 'On Flight'
+        else:
+            status = 'Arrived'
+        schedule_data.append({
+            'schedule': s,
+            'status': status
+        })
+
+    return render_template(
+        'flight_schedules/flight_schedules.html',
+        schedule_data=schedule_data,
+        current_time=current_time
+    )
+
 
 @views.route('/flight_schedules/add', methods=['GET', 'POST'])
 @login_required
@@ -318,11 +402,21 @@ def add_airport():
         name = request.form['name']
         city = request.form['city']
         country = request.form['country']
+
+        # Check for duplicate code
+        existing_airport = Airport.query.filter_by(code=code).first()
+        if existing_airport:
+            flash('Airport code already exists. Please use a different code.', category='error')
+            return redirect(url_for('views.add_airport'))
+
         new_airport = Airport(code=code, name=name, city=city, country=country)
         db.session.add(new_airport)
         db.session.commit()
+        flash('Airport added successfully!', category='success')
         return redirect(url_for('views.airports'))
+
     return render_template('assets/add_airport.html')
+
 
 @views.route('/airports/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -401,13 +495,23 @@ def add_aircraft():
     airlines = Airline.query.all()
     if request.method == 'POST':
         model = request.form['model']
+        aircraft_type = request.form['type']
         capacity = request.form['capacity']
         airline_id = request.form['airline_id']
-        new_aircraft = Aircraft(model=model, capacity=capacity, airline_id=airline_id)
+
+        new_aircraft = Aircraft(
+            model=model,
+            type=aircraft_type,
+            capacity=capacity,
+            airline_id=airline_id
+        )
+
         db.session.add(new_aircraft)
         db.session.commit()
         return redirect(url_for('views.aircraft'))
+
     return render_template('assets/add_aircraft.html', airlines=airlines)
+
 
 @views.route('/aircraft/edit/<int:id>', methods=['GET', 'POST'])
 @login_required

@@ -1,21 +1,26 @@
-<form method="POST">
-    <div class="mb-3">
-        <label for="model" class="form-label">Model</label>
-        <input type="text" name="model" id="model" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label for="capacity" class="form-label">Capacity</label>
-        <input type="number" name="capacity" id="capacity" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label for="airline_id" class="form-label">Airline</label>
-        <select name="airline_id" id="airline_id" class="form-select" required>
-            <option value="" disabled selected>Select an airline</option>
-            {% for airline in airlines %}
-            <option value="{{ airline.id }}">{{ airline.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <button type="submit" class="btn btn-success">Add</button>
-    <a href="{{ url_for('views.aircraft') }}" class="btn btn-secondary">Cancel</a>
-</form>
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Add Airport</h2>
+    <form method="POST" action="{{ url_for('views.add_airport') }}">
+        <div class="mb-3">
+            <label for="code" class="form-label">Airport Code</label>
+            <input type="text" class="form-control" id="code" name="code" required>
+        </div>
+        <div class="mb-3">
+            <label for="name" class="form-label">Airport Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="city" class="form-label">City</label>
+            <input type="text" class="form-control" id="city" name="city" required>
+        </div>
+        <div class="mb-3">
+            <label for="country" class="form-label">Country</label>
+            <input type="text" class="form-control" id="country" name="country" required>
+        </div>
+        <button type="submit" class="btn btn-success">Add Airport</button>
+        <a href="{{ url_for('views.airports') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

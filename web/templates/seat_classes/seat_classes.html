@@ -1,32 +1,49 @@
+{% extends 'base.html' %}
+
 {% block content %}
-<div class="container">
-    <h2>Seat Classes</h2>
-    <a class="btn btn-secondary" href="{{ url_for('views.dashboard') }}"><i class="fas fa-arrow-left"></i>Back|</a>
-    <a class="btn btn-primary mb-3" href="{{ url_for('views.add_seat_class') }}">Add Seat Class</a>
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price Multiplier</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for cls in classes %}
-            <tr>
-                <td>{{ cls.id }}</td>
-                <td>{{ cls.name }}</td>
-                <td>{{ cls.description or '-' }}</td>
-                <td>{{ cls.price_multiplier }}</td>
-                <td>
-                    <a class="btn btn-sm btn-warning" href="{{ url_for('views.edit_seat_class', id=cls.id) }}">Edit</a>
-                    <a class="btn btn-sm btn-danger" href="{{ url_for('views.delete_seat_class', id=cls.id) }}" onclick="return confirm('Delete this seat class?');">Delete</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold mb-6">Seat Classes</h2>
+
+    <div class="mb-4 flex flex-wrap gap-3">
+        <a href="{{ url_for('views.dashboard') }}" class="inline-flex items-center bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">
+            <i class="fas fa-arrow-left mr-2"></i> Back
+        </a>
+        <a href="{{ url_for('views.add_seat_class') }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+            <i class="fas fa-plus mr-2"></i> Add Seat Class
+        </a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white shadow border rounded-lg">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="px-4 py-2 text-left">ID</th>
+                    <th class="px-4 py-2 text-left">Name</th>
+                    <th class="px-4 py-2 text-left">Description</th>
+                    <th class="px-4 py-2 text-left">Price Multiplier</th>
+                    <th class="px-4 py-2 text-left">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for cls in classes %}
+                <tr class="hover:bg-gray-100 even:bg-gray-50">
+                    <td class="px-4 py-2">{{ cls.id }}</td>
+                    <td class="px-4 py-2">{{ cls.name }}</td>
+                    <td class="px-4 py-2">{{ cls.description or '-' }}</td>
+                    <td class="px-4 py-2">{{ cls.price_multiplier }}</td>
+                    <td class="px-4 py-2 space-x-2">
+                        <a href="{{ url_for('views.edit_seat_class', id=cls.id) }}" class="inline-flex items-center px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded text-sm">
+                            <i class="fas fa-edit mr-1"></i>
+                        </a>
+                        <a href="{{ url_for('views.delete_seat_class', id=cls.id) }}" onclick="return confirm('Delete this seat class?');"
+                           class="inline-flex items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm">
+                            <i class="fas fa-trash mr-1"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

@@ -1,25 +1,46 @@
-
+{% extends 'base.html' %}
 {% block content %}
-<div class="container">
+<div class="container mt-4">
     <h2>Add Flight</h2>
-        <a class="btn btn-secondary" href="{{ url_for('views.dashboard') }}"><i class="fas fa-arrow-left"></i>Back|</a>
+    <a class="btn btn-secondary" href="{{ url_for('views.dashboard') }}"><i class="fas fa-arrow-left"></i>Back</a>
     <form method="POST">
         <div class="mb-3">
             <label>Flight Number</label>
             <input type="text" class="form-control" name="flight_number" required>
         </div>
+
         <div class="mb-3">
-            <label>Airline ID</label>
-            <input type="number" class="form-control" name="airline_id" required>
+            <label>Airline</label>
+            <select class="form-select" name="airline_id" required>
+                <option value="" disabled selected>Select Airline</option>
+                {% for airline in airlines %}
+                <option value="{{ airline.id }}">{{ airline.name }}</option>
+                {% endfor %}
+            </select>
         </div>
+
         <div class="mb-3">
-            <label>Aircraft ID</label>
-            <input type="number" class="form-control" name="aircraft_id" required>
+            <label>Aircraft</label>
+            <select class="form-select" name="aircraft_id" required>
+                <option value="" disabled selected>Select Aircraft</option>
+                {% for aircraft in aircrafts %}
+                <option value="{{ aircraft.id }}">{{ aircraft.model }}</option>
+                {% endfor %}
+            </select>
         </div>
+
         <div class="mb-3">
-            <label>Route ID</label>
-            <input type="number" class="form-control" name="route_id" required>
+            <label>Route</label>
+            <select class="form-select" name="route_id" required>
+                <option value="" disabled selected>Select Route</option>
+                {% for route in routes %}
+                <option value="{{ route.id }}">{{ route.departure_airport.name }} → {{ route.arrival_airport.name }}</option>
+                {% endfor %}
+                
+            </select>
         </div>
+
+        
         <button type="submit" class="btn btn-primary">Add Flight</button>
     </form>
 </div>

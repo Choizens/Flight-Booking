@@ -1,30 +1,49 @@
+{% extends 'base.html' %}
 
 {% block content %}
-<h2>Aircraft</h2>
-<a class="btn btn-secondary" href="{{ url_for('views.dashboard') }}"><i class="fas fa-arrow-left"></i>Back|</a>
-<a href="{{ url_for('views.add_aircraft') }}" class="btn btn-success mb-3">Add Aircraft</a>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Model</th>
-            <th>Capacity</th>
-            <th>Actions</th>
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="flex flex-wrap justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">Aircraft</h2>
+        <div class="flex gap-3 mt-4 md:mt-0">
+            <a href="{{ url_for('views.dashboard') }}" class="inline-flex items-center bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">
+                <i class="fas fa-arrow-left mr-2"></i> Back
+            </a>
+            <a href="{{ url_for('views.add_aircraft') }}" class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+                <i class="fas fa-plus mr-2"></i> Add Aircraft
+            </a>
+        </div>
+    </div>
 
-        </tr>
-    </thead>
-    <tbody>
-        {% for a in aircraft %}
-        <tr>
-            <td>{{ a.id }}</td>
-            <td>{{ a.model }}</td>
-            <td>{{ a.capacity }}</td>
-            <td>
-                <a href="{{ url_for('views.edit_aircraft', id=a.id) }}" class="btn btn-primary btn-sm">Edit</a>
-                <a href="{{ url_for('views.delete_aircraft', id=a.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete this aircraft?');">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white shadow border rounded-lg">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="px-4 py-2 text-left">ID</th>
+                    <th class="px-4 py-2 text-left">Model</th>
+                    <th class="px-4 py-2 text-left">Capacity</th>
+                    <th class="px-4 py-2 text-left">Type</th>
+                    <th class="px-4 py-2 text-left">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for a in aircraft %}
+                <tr class="hover:bg-gray-100 even:bg-gray-50">
+                    <td class="px-4 py-2">{{ a.id }}</td>
+                    <td class="px-4 py-2">{{ a.model }}</td>
+                    <td class="px-4 py-2">{{ a.capacity }}</td>
+                    <td class="px-4 py-2">{{ a.type }}</td>
+                    <td class="px-4 py-2 space-x-2">
+                        <a href="{{ url_for('views.edit_aircraft', id=a.id) }}" class="inline-flex items-center px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded text-sm">
+                            <i class="fas fa-edit mr-1"></i>
+                        </a>
+                        <a href="{{ url_for('views.delete_aircraft', id=a.id) }}" onclick="return confirm('Delete this aircraft?');" class="inline-flex items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm">
+                            <i class="fas fa-trash mr-1"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

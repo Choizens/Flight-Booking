@@ -1,37 +1,54 @@
-
 {% extends 'base.html' %}
-{% block content %}
 
-<div class="container">
-    <h2>Flight Routes</h2>
-    <a class="btn btn-secondary" href="{{ url_for('views.dashboard') }}"><i class="fas fa-arrow-left"></i>Back|</a>
-    <a class="btn btn-primary mb-3" href="{{ url_for('views.add_flight_route') }}">Add Route</a>
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Origin</th>
-                <th>Destination</th>
-                <th>Distance (km)</th>
-                <th>Duration (mins)</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for route in routes %}
-            <tr>
-                <td>{{ route.id }}</td>
-                <td>{{ route.departure_airport.name }}</td>
-                <td>{{ route.arrival_airport.name }}</td>
-                <td>{{ route.distance }}</td>
-                <td>{{ route.duration }}</td>
-                <td>
-                    <a class="btn btn-sm btn-warning" href="{{ url_for('views.edit_flight_route', id=route.id) }}">Edit</a>
-                    <a class="btn btn-sm btn-danger" href="{{ url_for('views.delete_flight_route', id=route.id) }}" onclick="return confirm('Delete this route?');">Delete</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold mb-6">Flight Routes</h2>
+
+    <div class="mb-4 flex flex-wrap gap-3">
+        <a href="{{ url_for('views.dashboard') }}" class="inline-flex items-center bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">
+            <i class="fas fa-arrow-left mr-2"></i> Back
+        </a>
+        <a href="{{ url_for('views.add_flight_route') }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+            <i class="fas fa-plus mr-2"></i> Add Route
+        </a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white shadow border rounded-lg">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="px-4 py-2 text-left">ID</th>
+                    <th class="px-4 py-2 text-left">Origin</th>
+                    <th class="px-4 py-2 text-left">Destination</th>
+                    <th class="px-4 py-2 text-left">Distance (km)</th>
+                    <th class="px-4 py-2 text-left">Duration (mins)</th>
+                    <th class="px-4 py-2 text-left">Airline</th>
+                    <th class="px-4 py-2 text-left">Aircraft</th>
+                    <th class="px-4 py-2 text-left">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for route in routes %}
+                <tr class="border-t hover:bg-gray-100">
+                    <td class="px-4 py-2">{{ route.id }}</td>
+                    <td class="px-4 py-2">{{ route.departure_airport.name }}</td>
+                    <td class="px-4 py-2">{{ route.arrival_airport.name }}</td>
+                    <td class="px-4 py-2">{{ route.distance }}</td>
+                    <td class="px-4 py-2">{{ route.duration }}</td>
+                    <td class="px-4 py-2">{{ route.airline.name }}</td>
+                    <td class="px-4 py-2">{{ route.aircraft.model }}</td>
+                    <td class="px-4 py-2 space-x-2">
+                        <a href="{{ url_for('views.edit_flight_route', id=route.id) }}" class="inline-flex items-center px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded text-sm">
+                            <i class="fas fa-edit mr-1"></i>
+                        </a>
+                        <a href="{{ url_for('views.delete_flight_route', id=route.id) }}" onclick="return confirm('Delete this route?');" class="inline-flex items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm">
+                            <i class="fas fa-trash mr-1"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

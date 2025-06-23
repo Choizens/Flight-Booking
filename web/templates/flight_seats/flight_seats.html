@@ -1,37 +1,56 @@
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <h2>Flight Seats</h2>
-    <a class="btn btn-secondary" href="{{ url_for('views.dashboard') }}"><i class="fas fa-arrow-left"></i>Back|</a>
-    <a class="btn btn-primary mb-3" href="{{ url_for('views.add_flight_seat') }}">Add Seat</a>
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Flight Schedule</th>
-                <th>Seat Number</th>
-                <th>Seat Class</th>
-                <th>Available</th>
-                <th>Price</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for seat in seats %}
-            <tr>
-                <td>{{ seat.id }}</td>
-                <td>{{ seat.flight_schedule.flight.flight_number }} - {{ seat.flight_schedule.departure_time.strftime('%Y-%m-%d %H:%M') }}</td>
-                <td>{{ seat.seat_number }}</td>
-                <td>{{ seat.seat_class.name }}</td>
-                <td>{{ 'Yes' if seat.is_available else 'No' }}</td>
-                <td>{{ seat.price }}</td>
-                <td>
-                    <a class="btn btn-sm btn-warning" href="{{ url_for('views.edit_flight_seat', id=seat.id) }}">Edit</a>
-                    <a class="btn btn-sm btn-danger" href="{{ url_for('views.delete_flight_seat', id=seat.id) }}" onclick="return confirm('Delete this seat?');">Delete</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold mb-6">Flight Seats</h2>
+
+    <div class="mb-4 flex flex-wrap gap-3">
+        <a href="{{ url_for('views.dashboard') }}" class="inline-flex items-center bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">
+            <i class="fas fa-arrow-left mr-2"></i> Back
+        </a>
+        <a href="{{ url_for('views.add_flight_seat') }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+            <i class="fas fa-plus mr-2"></i> Add Seat
+        </a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white shadow border rounded-lg">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="px-4 py-2 text-left">ID</th>
+                    <th class="px-4 py-2 text-left">Flight Schedule</th>
+                    <th class="px-4 py-2 text-left">Seat Number</th>
+                    <th class="px-4 py-2 text-left">Seat Class</th>
+                    <th class="px-4 py-2 text-left">Available</th>
+                    <th class="px-4 py-2 text-left">Price</th>
+                    <th class="px-4 py-2 text-left">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for seat in seats %}
+                <tr class="hover:bg-gray-100 even:bg-gray-50">
+                    <td class="px-4 py-2 whitespace-nowrap">{{ seat.id }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap">
+                        {{ seat.flight_schedule.flight.flight_number }} -
+                        {{ seat.flight_schedule.departure_time.strftime('%Y-%m-%d %H:%M') }}
+                    </td>
+                    <td class="px-4 py-2 whitespace-nowrap">{{ seat.seat_number }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap">{{ seat.seat_class.name }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap">{{ 'Yes' if seat.is_available else 'No' }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap">{{ seat.price }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap space-x-2">
+                        <a href="{{ url_for('views.edit_flight_seat', id=seat.id) }}" class="inline-flex items-center px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded text-sm">
+                            <i class="fas fa-edit mr-1"></i>
+                        </a>
+                        <a href="{{ url_for('views.delete_flight_seat', id=seat.id) }}" onclick="return confirm('Delete this seat?');"
+                           class="inline-flex items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm">
+                            <i class="fas fa-trash mr-1"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

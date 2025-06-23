@@ -1,16 +1,52 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login</title>
+
+  <!-- ✅ Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- ✅ Font Awesome (for back arrow icon) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-100 relative min-h-screen">
+
+<!-- Back Button (Top Left) -->
+<div class="absolute top-4 left-4">
+  <a href="javascript:history.back()" class="inline-flex items-center bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded shadow">
+    <i class="fas fa-arrow-left mr-2"></i> Back
+  </a>
+</div>
 
 
-{% block content %}
+  <!-- Login Card -->
+  <div class="flex justify-center items-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <h2 class="text-2xl font-semibold text-center mb-6 text-gray-800">Admin Login</h2>
+      
+      <form method="POST" class="space-y-5">
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+          <input type="text" id="username" name="username" required
+                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+        </div>
 
-<form method="POST">
-    <label for="username">username:</label>
-    <input type="text" id="username" name="username" required>
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+          <input type="password" id="password" name="password" required
+                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+        </div>
 
-    <label for="password">password:</label>
-    <input type="text" id="password" name="password" required>
+        <div>
+          <button type="submit"
+                  class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200">
+            Login
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-    <input type="submit" value="Login">
-</form>
-</form>
-{% endblock %}
+</body>
+</html>

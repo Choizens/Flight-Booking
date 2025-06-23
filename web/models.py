@@ -8,10 +8,13 @@ from flask_login import UserMixin
 # ---------------------------
 # User Authentication Model
 # ---------------------------
+# models.py
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(225), unique=True, nullable=False)
-    password = db.Column(db.String(225), unique=True, nullable=False)
+    password = db.Column(db.String(225), nullable=False)
+    profile_image = db.Column(db.String(255), nullable=True, default='default.png')  # default image
+
 
 
 from . import db
@@ -51,11 +54,13 @@ class Aircraft(db.Model):
     __tablename__ = 'aircraft'
     id = db.Column(db.Integer, primary_key=True)
     model = db.Column(db.String(100), nullable=False)
+    type = db.Column(db.String(20), nullable=False)  # NEW: "Domestic" or "International"
     capacity = db.Column(db.Integer, nullable=False)
     airline_id = db.Column(db.Integer, db.ForeignKey('airline.id'), nullable=False)
 
     airline = db.relationship('Airline', back_populates='aircraft')
     flights = db.relationship('Flight', back_populates='aircraft')
+
 
 # ---------------------------
 # FlightRoute Model
@@ -66,14 +71,17 @@ class FlightRoute(db.Model):
     departure_airport_id = db.Column(db.Integer, db.ForeignKey('airport.id'), nullable=False)
     arrival_airport_id = db.Column(db.Integer, db.ForeignKey('airport.id'), nullable=False)
     airline_id = db.Column(db.Integer, db.ForeignKey('airline.id'), nullable=False)
+    aircraft_id = db.Column(db.Integer, db.ForeignKey('aircraft.id'), nullable=False)
     distance = db.Column(db.Float, nullable=False)
-    duration = db.Column(db.Float, nullable=False)  # Duration in hours or minutes
+    duration = db.Column(db.Float, nullable=False)
 
     departure_airport = db.relationship('Airport', foreign_keys=[departure_airport_id], back_populates='routes_departure')
     arrival_airport = db.relationship('Airport', foreign_keys=[arrival_airport_id], back_populates='routes_arrival')
     airline = db.relationship('Airline', back_populates='flight_routes')
+    aircraft = db.relationship('Aircraft', backref='flight_routes')
 
     flights = db.relationship('Flight', back_populates='route')
+
 
 # ---------------------------
 # Flight Model
