@@ -1,15 +1,151 @@
-{% block content %}
-<form method="POST">
-    <label for="username">username:</label>
-    <input type="text" id="username" name="username" required>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Manager System - Login</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <style>
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        
+        .bg-primary-green {
+            background-color: #053322;
+        }
+        
+        .text-primary-green {
+            color: #053322;
+        }
+        
+        .border-primary-green {
+            border-color: #053322;
+        }
+        
+        .floating-label {
+            position: absolute;
+            pointer-events: none;
+            left: 12px;
+            top: 14px;
+            transition: 0.2s ease all;
+        }
+        
+        .input-field:focus ~ .floating-label,
+        .input-field:not(:placeholder-shown) ~ .floating-label {
+            top: -10px;
+            left: 10px;
+            font-size: 12px;
+            opacity: 1;
+            background: white;
+            padding: 0 5px;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 14px;
+            cursor: pointer;
+        }
+    </style>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#053322',secondary:'#0A5C3C'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="absolute inset-0 z-0 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-primary/90 to-primary/70"></div>
+    </div>
 
-    <label for="password">password:</label>
-    <input type="password" id="password" name="password" required>
+    <!-- Back Button -->
+    <div class="absolute top-6 left-6 z-10">
+      <button onclick="goBack()" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-button backdrop-blur-sm transition-all duration-300 whitespace-nowrap">
+        <div class="w-5 h-5 flex items-center justify-center">
+          <i class="ri-arrow-left-line"></i>
+        </div>
+        <span>Back</span>
+      </button>
+    </div>
 
-    <label for="password2">Confirm password:</label>
-    <input type="password" id="password2" name="password2" required>
+    <!-- Centered Form -->
+    <div class="relative z-10 flex items-center justify-center min-h-screen">
+        <div class="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
+            <div class="text-center mb-8">
+                <h1 class="font-['Pacifico'] text-3xl text-primary mb-2">SkyWays</h1>
+                <p class="text-gray-600">Flight Manager System</p>
+            </div>
 
-    <input type="submit" value="Register">
-</form>
-{% endblock %}
+            <form method="POST" id="loginForm" class="space-y-6">
+                <div class="relative">
+                    <input type="text" id="username" name="username"
+                        class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                        placeholder=" " required>
+                    <label for="username" class="floating-label text-gray-500">Username</label>
+                </div>
 
+                <div class="relative">
+                    <input type="password" id="password" name="password"
+                        class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                        placeholder=" " required>
+                    <label for="password" class="floating-label text-gray-500">Password</label>
+                    <div class="password-toggle w-8 h-8 flex items-center justify-center text-gray-500">
+                        <i class="ri-eye-off-line"></i>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <input type="password" id="password2" name="password2"
+                        class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                        placeholder=" " required>
+                    <label for="password2" class="floating-label text-gray-500">Confirm Password</label>
+                    <div class="password-toggle w-8 h-8 flex items-center justify-center text-gray-500">
+                        <i class="ri-eye-off-line"></i>
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-primary text-white py-3 rounded-button font-medium hover:bg-opacity-90 transition-all duration-300 flex items-center justify-center whitespace-nowrap">
+                    <span>Register</span>
+                </button>
+
+                <div class="text-center text-sm text-gray-600">
+                    <p>Already have an account? <a href="#" class="text-primary hover:underline">Sign in</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Back button functionality
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                // If no history, redirect to a default page or show message
+                window.location.href = '/'; // Change this to your desired fallback URL
+            }
+        }
+
+        // Password visibility toggle
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleButtons = document.querySelectorAll('.password-toggle');
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const input = this.parentElement.querySelector('input');
+                    const icon = this.querySelector('i');
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('ri-eye-off-line');
+                        icon.classList.add('ri-eye-line');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('ri-eye-line');
+                        icon.classList.add('ri-eye-off-line');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -2,49 +2,138 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Login</title>
-
-  <!-- ✅ Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- ✅ Font Awesome (for back arrow icon) -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flight Manager System</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"/>
+  <style>
+    :where([class^="ri-"])::before { content: "\f3c2"; }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#053322',
+            secondary: '#0a5c3e'
+          },
+          borderRadius: {
+            'none': '0px',
+            'sm': '4px',
+            DEFAULT: '8px',
+            'md': '12px',
+            'lg': '16px',
+            'xl': '20px',
+            '2xl': '24px',
+            '3xl': '32px',
+            'full': '9999px',
+            'button': '8px'
+          }
+        }
+      }
+    };
+  </script>
 </head>
-<body class="bg-gray-100 relative min-h-screen">
+<body class="bg-gray-50 min-h-screen">
 
-<!-- Back Button (Top Left) -->
-<div class="absolute top-4 left-4">
-  <a href="javascript:history.back()" class="inline-flex items-center bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded shadow">
-    <i class="fas fa-arrow-left mr-2"></i> Back
-  </a>
-</div>
+  <div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <!-- Background with pattern -->
+    <div class="absolute inset-0 z-0 overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-primary/90 to-primary/70"></div>
+    </div>
 
+    <!-- Back Button -->
+    <div class="absolute top-6 left-6 z-10">
+      <a href="javascript:history.back()" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-button backdrop-blur-sm transition-all duration-300 whitespace-nowrap">
+        <div class="w-5 h-5 flex items-center justify-center">
+          <i class="ri-arrow-left-line"></i>
+        </div>
+        <span>Back</span>
+      </a>
+    </div>
 
-  <!-- Login Card -->
-  <div class="flex justify-center items-center min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-      <h2 class="text-2xl font-semibold text-center mb-6 text-gray-800">Admin Login</h2>
-      
-      <form method="POST" class="space-y-5">
-        <div>
-          <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-          <input type="text" id="username" name="username" required
-                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+    <div class="w-full max-w-md z-10">
+      <!-- Login Card -->
+      <div class="bg-white/90 backdrop-blur-xl rounded-xl shadow-xl overflow-hidden">
+        <!-- Card Header with Airplane -->
+        <div class="bg-primary/95 text-white p-6 text-center relative">
+          <div class="floating inline-block mb-2">
+            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto">
+              <div class="w-10 h-10 flex items-center justify-center">
+                <i class="ri-plane-line ri-2x"></i>
+              </div>
+            </div>
+          </div>
+          <h1 class="text-2xl font-bold">Admin</h1>
+          <p class="text-white/80 mt-1">Sign in to access your dashboard</p>
         </div>
 
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-          <input type="password" id="password" name="password" required
-                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-        </div>
+        <!-- Login Form -->
+        <div class="p-8">
+          <form class="space-y-6" method="POST">
+            <!-- Username Input -->
+            <div>
+              <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+              <div class="relative">
+                <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 flex items-center justify-center">
+                  <i class="ri-user-line"></i>
+                </div>
+                <input type="text" id="username" name="username" class="w-full pl-10 pr-4 py-3 border-gray-200 border rounded-button focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all duration-200 text-sm" placeholder="Enter your username" required/>
+              </div>
+            </div>
 
-        <div>
-          <button type="submit"
-                  class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200">
-            Login
-          </button>
+            <!-- Password Input -->
+            <div>
+              <div class="relative">
+                <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 flex items-center justify-center">
+                  <i class="ri-lock-line"></i>
+                </div>
+                <input type="password" id="password" name="password" class="w-full pl-10 pr-10 py-3 border-gray-200 border rounded-button focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all duration-200 text-sm" placeholder="Enter your password" required/>
+                <button type="submit" id="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors w-5 h-5 flex items-center justify-center">
+                  <i class="ri-eye-off-line" id="passwordIcon"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Remember Me -->
+            <div class="flex items-center">
+              <div class="relative inline-block">
+                <input type="checkbox" id="remember" class="sr-only peer"/>
+                <label for="remember" class="block w-4 h-4 rounded border border-gray-300 peer-checked:bg-primary peer-checked:border-primary cursor-pointer transition-colors"></label>
+                <div class="absolute top-0 left-0 w-4 h-4 text-white opacity-0 peer-checked:opacity-100 pointer-events-none flex items-center justify-center">
+                  <i class="ri-check-line ri-xs"></i>
+                </div>
+              </div>
+              <label for="remember" class="ml-2 text-sm text-gray-600 cursor-pointer">Remember me</label>
+            </div>
+
+            <!-- Login Button -->
+            <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white py-3 px-4 rounded-button transition-all duration-200 flex items-center justify-center gap-2 !rounded-button whitespace-nowrap">
+              <span>Sign In</span>
+              <div class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-login-circle-line"></i>
+              </div>
+            </button>
+          </form>
         </div>
-      </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="text-center mt-6 text-white/70 text-sm">
+        <p>© 2025 Flight Manager System. All rights reserved.</p>
+        <p class="mt-1">Need help? <a href="#" class="text-white hover:underline">Contact support</a></p>
+      </div>
     </div>
   </div>
 

@@ -1,19 +1,509 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flight Booking Simulator</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirFlight Manager System</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#053322',secondary:'#0a5d3c'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <style>
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .custom-checkbox {
+            position: relative;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+        .custom-checkbox input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #fff;
+            border: 2px solid #e5e7eb;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        .custom-checkbox input:checked ~ .checkmark {
+            background-color: #053322;
+            border-color: #053322;
+        }
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        .custom-checkbox input:checked ~ .checkmark:after {
+            display: block;
+        }
+        .custom-checkbox .checkmark:after {
+            left: 6px;
+            top: 2px;
+            width: 6px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        .custom-radio {
+            position: relative;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+        .custom-radio input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .radio-mark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #fff;
+            border: 2px solid #e5e7eb;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        .custom-radio input:checked ~ .radio-mark {
+            border-color: #053322;
+        }
+        .radio-mark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            top: 4px;
+            left: 4px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #053322;
+        }
+        .custom-radio input:checked ~ .radio-mark:after {
+            display: block;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e5e7eb;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #053322;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        .range-slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: #e5e7eb;
+            outline: none;
+        }
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #053322;
+            cursor: pointer;
+        }
+        .range-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #053322;
+            cursor: pointer;
+            border: none;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-  <div class="text-center bg-white p-10 rounded-lg shadow-md">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome to the Flight Booking Simulation Platform</h1>
-    
-    <div class="space-x-4">
-      <a href="{{ url_for('auth.login') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded transition">Login</a>
-      <a href="{{ url_for('auth.register') }}" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded transition">Register</a>
-    </div>
-  </div>
+<body class="bg-gray-50">
+    <header class="fixed top-0 left-0 w-full bg-primary text-white shadow-lg z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-['Pacifico'] tracking-wide">SkyWings</a>
+                </div>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="hover:text-gray-300 transition duration-300 flex items-center font-medium">
+                        <div class="w-5 h-5 flex items-center justify-center mr-2">
+                            <i class="ri-settings-3-line"></i>
+                        </div>
+                        Manage
+                    </a>
+                    <a href="#" class="hover:text-gray-300 transition duration-300 flex items-center font-medium">
+                        <div class="w-5 h-5 flex items-center justify-center mr-2">
+                            <i class="ri-flight-takeoff-line"></i>
+                        </div>
+                        Travel Info
+                    </a>
+                    <a href="#" class="hover:text-gray-300 transition duration-300 flex items-center font-medium">
+                        <div class="w-5 h-5 flex items-center justify-center mr-2">
+                            <i class="ri-earth-line"></i>
+                        </div>
+                        Explore
+                    </a>
+                    <a href="#" class="hover:text-gray-300 transition duration-300 flex items-center font-medium">
+                        <div class="w-5 h-5 flex items-center justify-center mr-2">
+                            <i class="ri-information-line"></i>
+                        </div>
+                        About
+                    </a>
+                </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="{{ url_for('auth.login') }}">
+                    <button class="bg-white text-primary px-5 py-2 rounded-button font-medium hover:bg-gray-100 transition duration-300 whitespace-nowrap">
+                        Admin
+                    </button>
+                </a>
+                
+                <a href="{{ url_for('auth.register') }}">
+                    <button class="bg-white text-primary px-5 py-2 rounded-button font-medium hover:bg-gray-100 transition duration-300 whitespace-nowrap">
+                        Register
+                    </button>
+                </a>
+
+                <!-- Mobile Menu Button (link or toggle) -->
+                <a href="#menu"> <!-- Replace #menu with actual mobile menu action if needed -->
+                    <button class="md:hidden w-10 h-10 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition duration-300">
+                        <i class="ri-menu-line text-xl"></i>
+                    </button>
+                </a>
+            </div>
+
+
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-16">
+        <section class="relative w-full" style="background-image: url('https://readdy.ai/api/search-image?query=A%20stunning%20aerial%20view%20of%20a%20modern%20passenger%20airplane%20flying%20above%20fluffy%20white%20clouds%20during%20golden%20hour%20sunset%2C%20with%20beautiful%20warm%20sunlight%20illuminating%20the%20aircraft%20and%20clouds%2C%20creating%20a%20breathtaking%20and%20serene%20atmosphere%2C%20professional%20photography%20with%20high%20dynamic%20range&width=1920&height=1080&seq=1&orientation=landscape'); background-size: cover; background-position: center; height: 600px;">
+            <div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent">
+                <div class="container mx-auto px-6 h-full flex items-center">
+                    <div class="text-white max-w-2xl">
+                        <h1 class="text-5xl font-bold mb-4 leading-tight">Elevate Your Flight Management Experience</h1>
+                        <p class="text-xl mb-8 opacity-90">Streamline operations, enhance passenger experience, and optimize your aviation business with our comprehensive management system.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+                <div class="lg:col-span-2">
+                    <a href="#" class="text-2xl font-['Pacifico'] tracking-wide mb-4 inline-block">SkyWings</a>
+                    <p class="text-gray-400 mb-6 max-w-md">Comprehensive aviation management solutions designed to streamline operations, enhance passenger experience, and optimize your business performance.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 flex items-center justify-center bg-gray-800 hover:bg-primary rounded-full transition duration-300">
+                            <i class="ri-facebook-fill"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center bg-gray-800 hover:bg-primary rounded-full transition duration-300">
+                            <i class="ri-twitter-x-fill"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center bg-gray-800 hover:bg-primary rounded-full transition duration-300">
+                            <i class="ri-linkedin-fill"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 flex items-center justify-center bg-gray-800 hover:bg-primary rounded-full transition duration-300">
+                            <i class="ri-instagram-fill"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Company</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Press</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Solutions</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Flight Management</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Passenger Experience</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Revenue Optimization</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Maintenance Tracking</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Analytics & Reporting</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Support</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Documentation</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">API Reference</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Community</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Status</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2025 SkyWings. All rights reserved.</p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#" class="text-gray-400 hover:text-white text-sm transition duration-300">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-white text-sm transition duration-300">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-white text-sm transition duration-300">Cookie Policy</a>
+                        <div class="flex items-center space-x-3">
+                            <i class="ri-visa-fill text-xl"></i>
+                            <i class="ri-mastercard-fill text-xl"></i>
+                            <i class="ri-paypal-fill text-xl"></i>
+                            <i class="ri-apple-fill text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <script id="flightStatsChart">
+        document.addEventListener('DOMContentLoaded', function() {
+            const chartDom = document.getElementById('flightStatisticsChart');
+            if (chartDom) {
+                const myChart = echarts.init(chartDom);
+                const option = {
+                    animation: false,
+                    tooltip: {
+                        trigger: 'axis',
+                        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                        borderColor: '#eee',
+                        borderWidth: 1,
+                        textStyle: {
+                            color: '#1f2937'
+                        }
+                    },
+                    legend: {
+                        data: ['On-time Performance', 'Passenger Load Factor', 'Revenue per Flight'],
+                        textStyle: {
+                            color: '#1f2937'
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        axisLine: {
+                            lineStyle: {
+                                color: '#ddd'
+                            }
+                        },
+                        axisLabel: {
+                            color: '#1f2937'
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLine: {
+                            lineStyle: {
+                                color: '#ddd'
+                            }
+                        },
+                        axisLabel: {
+                            color: '#1f2937',
+                            formatter: '{value}%'
+                        },
+                        splitLine: {
+                            lineStyle: {
+                                color: '#eee'
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'On-time Performance',
+                            type: 'line',
+                            smooth: true,
+                            lineStyle: {
+                                width: 3,
+                                color: 'rgba(87, 181, 231, 1)'
+                            },
+                            symbol: 'none',
+                            areaStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 0,
+                                    x2: 0,
+                                    y2: 1,
+                                    colorStops: [{
+                                        offset: 0, color: 'rgba(87, 181, 231, 0.2)'
+                                    }, {
+                                        offset: 1, color: 'rgba(87, 181, 231, 0.01)'
+                                    }]
+                                }
+                            },
+                            data: [88, 85, 87, 90, 92, 91, 89, 93, 94, 92, 91, 93]
+                        },
+                        {
+                            name: 'Passenger Load Factor',
+                            type: 'line',
+                            smooth: true,
+                            lineStyle: {
+                                width: 3,
+                                color: 'rgba(141, 211, 199, 1)'
+                            },
+                            symbol: 'none',
+                            areaStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 0,
+                                    x2: 0,
+                                    y2: 1,
+                                    colorStops: [{
+                                        offset: 0, color: 'rgba(141, 211, 199, 0.2)'
+                                    }, {
+                                        offset: 1, color: 'rgba(141, 211, 199, 0.01)'
+                                    }]
+                                }
+                            },
+                            data: [75, 78, 82, 84, 86, 88, 90, 91, 89, 87, 85, 88]
+                        },
+                        {
+                            name: 'Revenue per Flight',
+                            type: 'line',
+                            smooth: true,
+                            lineStyle: {
+                                width: 3,
+                                color: 'rgba(251, 191, 114, 1)'
+                            },
+                            symbol: 'none',
+                            areaStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 0,
+                                    x2: 0,
+                                    y2: 1,
+                                    colorStops: [{
+                                        offset: 0, color: 'rgba(251, 191, 114, 0.2)'
+                                    }, {
+                                        offset: 1, color: 'rgba(251, 191, 114, 0.01)'
+                                    }]
+                                }
+                            },
+                            data: [65, 68, 70, 72, 75, 78, 80, 82, 79, 77, 76, 81]
+                        }
+                    ]
+                };
+                
+                myChart.setOption(option);
+                
+                window.addEventListener('resize', function() {
+                    myChart.resize();
+                });
+            }
+        });
+    </script>
+    <script id="formInteractions">
+        document.addEventListener('DOMContentLoaded', function() {
+            const tripTypeRadios = document.querySelectorAll('input[name="trip-type"]');
+            const returnDateField = document.querySelector('input[type="date"][value="2025-07-02"]');
+            const returnDateContainer = returnDateField ? returnDateField.closest('div').parentElement : null;
+            
+            if (tripTypeRadios.length && returnDateContainer) {
+                tripTypeRadios.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        if (this.checked && this.nextElementSibling.nextElementSibling.textContent.trim() === 'One Way') {
+                            returnDateContainer.style.opacity = '0.5';
+                            returnDateContainer.style.pointerEvents = 'none';
+                            returnDateField.disabled = true;
+                        } else {
+                            returnDateContainer.style.opacity = '1';
+                            returnDateContainer.style.pointerEvents = 'auto';
+                            returnDateField.disabled = false;
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+    <script id="mobileMenu">
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuButton = document.querySelector('.ri-menu-line').closest('button');
+            const navLinks = document.querySelector('.hidden.md\\:flex');
+            
+            if (menuButton && navLinks) {
+                menuButton.addEventListener('click', function() {
+                    if (navLinks.classList.contains('hidden')) {
+                        navLinks.classList.remove('hidden');
+                        navLinks.classList.add('flex', 'flex-col', 'absolute', 'top-16', 'left-0', 'right-0', 'bg-primary', 'p-4', 'shadow-lg', 'space-y-4', 'space-x-0');
+                    } else {
+                        navLinks.classList.add('hidden');
+                        navLinks.classList.remove('flex', 'flex-col', 'absolute', 'top-16', 'left-0', 'right-0', 'bg-primary', 'p-4', 'shadow-lg', 'space-y-4', 'space-x-0');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
